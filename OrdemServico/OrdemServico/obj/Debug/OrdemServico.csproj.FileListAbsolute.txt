@@ -1,1 +1,6 @@
 C:\Users\pedro.pinese\Desktop\Pedro\C#\OS_FOriani\OrdemServico\OrdemServico\bin\Debug\OrdemServico.exe.config
+C:\Users\pedro.pinese\Desktop\Pedro\C#\OS_FOriani\OrdemServico\OrdemServico\bin\Debug\OrdemServico.exe
+C:\Users\pedro.pinese\Desktop\Pedro\C#\OS_FOriani\OrdemServico\OrdemServico\bin\Debug\OrdemServico.pdb
+C:\Users\pedro.pinese\Desktop\Pedro\C#\OS_FOriani\OrdemServico\OrdemServico\obj\Debug\OrdemServico.csprojResolveAssemblyReference.cache
+C:\Users\pedro.pinese\Desktop\Pedro\C#\OS_FOriani\OrdemServico\OrdemServico\obj\Debug\OrdemServico.exe
+C:\Users\pedro.pinese\Desktop\Pedro\C#\OS_FOriani\OrdemServico\OrdemServico\obj\Debug\OrdemServico.pdb

@@ -8,5 +8,7 @@ namespace OrdemServico
 {
     class Area
     {
+        public int codigo { get; set; }
+        public double area { get; set; }
     }
 }
