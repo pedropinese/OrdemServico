@@ -2,15 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace OrdemServico
 {
     class Program
     {
+        public static int numero_os = 1;
+
         static void Main(string[] args)
         {
-            int numero_os = 1;
             string operacao = "";
             Area a = new Area();
             Os os = new Os();
@@ -18,9 +20,7 @@ namespace OrdemServico
             os.listaOsFechadas = new List<Os>();
             while (operacao != "0")
             {
-                Console.Clear();
-                Console.WriteLine("\t\tORDEM DE SERVICO");
-                Console.WriteLine("\n\t0 - Sair\n\t1 - Criar OS\n\t2 - Listar OS's\n\t3 - Encerrar OS\n\t4 - Nova area na OS");
+                titulo("0 - Sair\n\t1 - Criar OS\n\t2 - Listar OS's\n\t3 - Encerrar OS\n\t4 - Nova area na OS");
                 Console.Write("\n\tSelecione a operacao: ");
                 operacao = Console.ReadLine();
                 Console.Clear();
@@ -28,8 +28,7 @@ namespace OrdemServico
                 {
                     case "0":
                         {
-                            Console.WriteLine("\t\tORDEM DE SERVICO");
-                            Console.WriteLine("\n\tPressione qualquer tecla para sair..");
+                            titulo("Pressione qualquer tecla para sair..");
                             break;
                         }
                     case "1":
@@ -37,7 +36,7 @@ namespace OrdemServico
                             try
                             {
                                 Os nova_os = new Os();
-                                nova_os = os.criar_os();
+                                nova_os = criar_os();
                                 nova_os.numero = numero_os;
                                 if (nova_os.data_encerramento.Equals(null)) //verifica se a os tem encerramento ou nao
                                 {
@@ -49,7 +48,7 @@ namespace OrdemServico
                                 }
                                 Console.Clear();
                                 mostra_sucesso("OS cadastrada com sucesso!");
-                                numero_os++;
+                                Interlocked.Increment(ref numero_os);
                             }
                             catch (FormatException ex)
                             {
@@ -76,9 +75,7 @@ namespace OrdemServico
                                     mostra_erro("Nenhuma OS cadastrada!");
                                     break;
                                 }
-                                Console.Clear();
-                                Console.WriteLine("\t\tORDEM DE SERVICO");
-                                Console.WriteLine("\n\t1 - OS Abertas\n\t2 - OS Fechadas\n\t3 - Todas as OS");
+                                titulo("1 - OS Abertas\n\t2 - OS Fechadas\n\t3 - Todas as OS");
                                 Console.Write("\n\tSelecione a operacao: ");
                                 int op = Convert.ToInt32(Console.ReadLine());
                                 Console.Clear();
@@ -121,9 +118,7 @@ namespace OrdemServico
                                 }
                                 else if (op == 3)
                                 {
-                                    Console.Clear();
-                                    Console.WriteLine("\t\tORDEM DE SERVICO");
-                                    Console.WriteLine("\n\t>>>>>>ABERTAS<<<<<<\n");
+                                    titulo(">>>>>>ABERTAS<<<<<<\n");
                                     foreach (Os ordemServico in os.listaOsAbertas)
                                     {
                                         x = 1;
@@ -184,21 +179,29 @@ namespace OrdemServico
                                     mostra_erro("Nenhuma OS aberta!");
                                     break;
                                 }
-                                Console.Clear();
-                                Console.WriteLine("\t\tORDEM DE SERVICO");
-                                Console.Write("\nDigite o numero da OS que deseja encerrar: ");
+                                titulo("Digite o numero da OS que deseja encerrar: ");
                                 int num_digitado = Convert.ToInt32(Console.ReadLine());
                                 int x = 0;
                                 foreach (Os ordemServico in os.listaOsAbertas)
                                 {
                                     if (num_digitado == ordemServico.numero)
                                     {
-                                        Console.Write("\nDigite a data de encerramento: ");
-                                        ordemServico.data_encerramento = Convert.ToDateTime(Console.ReadLine());
+                                        do
+                                        {
+                                            titulo("Digite a data de encerramento: ");
+                                            ordemServico.data_encerramento = Convert.ToDateTime(Console.ReadLine());
+                                            if (ordemServico.data_encerramento < ordemServico.data_abertura)
+                                            {
+                                                mostra_erro("Data de encerramento deve ser posterior a de abertura");
+                                                Console.ReadKey();
+                                            }
+                                        } while (ordemServico.data_encerramento < ordemServico.data_abertura);
+
                                         os.listaOsFechadas.Add(ordemServico);
                                         os.listaOsAbertas.Remove(ordemServico);
                                         mostra_sucesso("Data inserida com sucesso");
                                         break;
+
                                     }
                                     else
                                     {
@@ -234,9 +237,7 @@ namespace OrdemServico
                                     mostra_erro("Nenhuma OS aberta!");
                                     break;
                                 }
-                                Console.Clear();
-                                Console.WriteLine("\t\tORDEM DE SERVICO");
-                                Console.Write("\nDigite o numero da OS que deseja adicionar: ");
+                                titulo("Digite o numero da OS que deseja adicionar: ");
                                 int num_digitado = Convert.ToInt32(Console.ReadLine());
                                 int x = 0;
                                 foreach (Os ordemServico in os.listaOsAbertas)
@@ -305,5 +306,76 @@ namespace OrdemServico
             Console.WriteLine("\n\tPronto!\n\n\t" + msg_sucesso);
             Console.ResetColor();
         }
+
+        public static Os criar_os()
+        {
+            Os os = new Os();
+            titulo("");
+            Console.Write("Digite a data de abertura: ");
+            os.data_abertura = Convert.ToDateTime(Console.ReadLine());
+            Console.Write("\nDigite o nome do responsavel: ");
+            os.responsavel = Console.ReadLine();
+            os.listaAreas = inserir_areas();
+            char escolha;
+            do
+            {
+                Console.WriteLine("\nDeseja encerrar essa OS? (s/n)");
+                escolha = Convert.ToChar(Console.ReadLine());
+                if (escolha == 's')
+                {
+                    do
+                    {
+                        Console.Clear();
+                        Console.WriteLine("\t\tORDEM DE SERVICO");
+                        Console.Write("\nDigite a data de encerramento: ");
+                        os.data_encerramento = Convert.ToDateTime(Console.ReadLine());
+                        if (os.data_encerramento < os.data_abertura)
+                        {
+                            mostra_erro("Data de encerramento deve ser posterior a de abertura");
+                            Console.ReadKey();
+                        }
+                    } while (os.data_encerramento < os.data_abertura);
+                }
+                else if (escolha == 'n')
+                {
+                    Console.WriteLine("\nOrdem de Serviço sem data de encerramento!");
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("\n\tErro!\n\n\tMotivo: Escolha uma das opcoes 's' ou 'n'");
+                    Console.ResetColor();
+                }
+            } while (escolha != 's' && escolha != 'n');
+            return os;
+        }
+
+        public static List<Area> inserir_areas()
+        {
+            Area a = new Area();
+            a.listaAreas = new List<Area>();
+            Console.Write("\nDigite quantas areas deseja inserir: ");
+            int qtde_areas = Convert.ToInt32(Console.ReadLine());
+            for (int i = 0; i < qtde_areas; i++)
+            {
+                Area a1 = new Area();
+                Console.Write("\nDigite o codigo da {0}º area: ", i + 1);
+                a1.codigo = Convert.ToInt32(Console.ReadLine());
+                Console.Write("\nDigite o tamanho da {0}º area: ", i + 1);
+                a1.area = Convert.ToDouble(Console.ReadLine());
+                a.listaAreas.Add(a1);
+            }
+            return a.listaAreas;
+        }
+
+        public static void titulo (string texto)
+        {
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("\t\tORDEM DE SERVICO");
+            Console.ResetColor();
+            Console.WriteLine("\n\t"+texto);            
+        }
+
     }
 }
