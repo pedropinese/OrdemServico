@@ -10,28 +10,29 @@ namespace OrdemServico
     {
         static void Main(string[] args)
         {
-            int operacao = 99, numero_os = 1;
+            int numero_os = 1;
+            string operacao = "";
             Area a = new Area();
             Os os = new Os();
             os.listaOsAbertas = new List<Os>();
             os.listaOsFechadas = new List<Os>();
-            while (operacao != 0)
+            while (operacao != "0")
             {
                 Console.Clear();
                 Console.WriteLine("\t\tORDEM DE SERVICO");
                 Console.WriteLine("\n\t0 - Sair\n\t1 - Criar OS\n\t2 - Listar OS's\n\t3 - Encerrar OS\n\t4 - Nova area na OS");
                 Console.Write("\n\tSelecione a operacao: ");
-                operacao = Int32.Parse(Console.ReadLine());
+                operacao = Console.ReadLine();
                 Console.Clear();
                 switch (operacao)
                 {
-                    case 0:
+                    case "0":
                         {
                             Console.WriteLine("\t\tORDEM DE SERVICO");
                             Console.WriteLine("\n\tPressione qualquer tecla para sair..");
                             break;
                         }
-                    case 1:
+                    case "1":
                         {
                             try
                             {
@@ -47,10 +48,7 @@ namespace OrdemServico
                                     os.listaOsFechadas.Add(nova_os);
                                 }
                                 Console.Clear();
-                                Console.WriteLine("\t\tORDEM DE SERVICO");
-                                Console.ForegroundColor = ConsoleColor.Green;
-                                Console.WriteLine("\n\tOS cadastrada com sucesso!");
-                                Console.ResetColor();
+                                mostra_sucesso("OS cadastrada com sucesso!");
                                 numero_os++;
                             }
                             catch (FormatException ex)
@@ -67,17 +65,117 @@ namespace OrdemServico
                             }
                             break;
                         }
-                    case 2:
+                    case "2":
+                        {
+                            try
+                            {
+                                double soma_areas;
+                                int x;
+                                Console.Clear();
+                                Console.WriteLine("\t\tORDEM DE SERVICO");
+                                Console.WriteLine("\n\t1 - OS Abertas\n\t2 - OS Fechadas\n\t3 - Todas as OS");
+                                Console.Write("\n\tSelecione a operacao: ");
+                                int op = Convert.ToInt32(Console.ReadLine());
+                                Console.Clear();
+                                Console.WriteLine("\t\tORDEM DE SERVICO");
+                                if (op == 1)
+                                {
+                                    foreach (Os ordemServico in os.listaOsAbertas)
+                                    {
+                                        x = 1;
+                                        soma_areas = 0;
+                                        Console.Write("_____________________________\n");
+                                        Console.WriteLine("Nº OS: {0}\nData Abertura: {1}\nResponsavel: {2}", ordemServico.numero, ordemServico.data_abertura, ordemServico.responsavel);
+                                        foreach (Area area in ordemServico.listaAreas)
+                                        {
+                                            Console.WriteLine("\tCodigo area {0}: {1}", x, area.codigo);
+                                            Console.WriteLine("\tTamanho: {0}", area.area);
+                                            soma_areas = soma_areas + area.area;
+                                            x++;
+                                        }
+                                        Console.WriteLine("Soma todas areas: " + soma_areas);
+                                    }
+                                }
+                                else if (op == 2)
+                                {
+                                    foreach (Os ordemServico in os.listaOsFechadas)
+                                    {
+                                        x = 1;
+                                        soma_areas = 0;
+                                        Console.Write("_____________________________\n");
+                                        Console.WriteLine("Nº OS: {0}\nData Abertura: {1}\nData Encerramento: {2}\nResponsavel: {3}", ordemServico.numero, ordemServico.data_abertura, ordemServico.data_encerramento, ordemServico.responsavel);
+                                        foreach (Area area in ordemServico.listaAreas)
+                                        {
+                                            Console.WriteLine("\tCodigo area {0}: {1}", x, area.codigo);
+                                            Console.WriteLine("\tTamanho: {0}", area.area);
+                                            soma_areas = soma_areas + area.area;
+                                            x++;
+                                        }
+                                        Console.WriteLine("Soma todas areas: " + soma_areas);
+                                    }
+                                }
+                                else if (op == 3)
+                                {
+                                    Console.Clear();
+                                    Console.WriteLine("\t\tORDEM DE SERVICO");
+                                    Console.WriteLine("\n\t>>>>>>ABERTAS<<<<<<\n");
+                                    foreach (Os ordemServico in os.listaOsAbertas)
+                                    {
+                                        x = 1;
+                                        soma_areas = 0;
+                                        Console.Write("_____________________________\n");
+                                        Console.WriteLine("Nº OS: {0}\nData Abertura: {1}\nResponsavel: {2}", ordemServico.numero, ordemServico.data_abertura, ordemServico.responsavel);
+                                        foreach (Area area in ordemServico.listaAreas)
+                                        {
+                                            Console.WriteLine("\tCodigo area {0}: {1}", x, area.codigo);
+                                            Console.WriteLine("\tTamanho: {0}", area.area);
+                                            soma_areas = soma_areas + area.area;
+                                            x++;
+                                        }
+                                        Console.WriteLine("Soma todas areas: " + soma_areas);
+                                    }
+                                    Console.WriteLine("\n\t>>>>>>FECHADAS<<<<<<\n");
+                                    foreach (Os ordemServico in os.listaOsFechadas)
+                                    {
+                                        x = 1;
+                                        soma_areas = 0;
+                                        Console.Write("_____________________________\n");
+                                        Console.WriteLine("Nº OS: {0}\nData Abertura: {1}\nData Encerramento: {2}\nResponsavel: {3}", ordemServico.numero, ordemServico.data_abertura, ordemServico.data_encerramento, ordemServico.responsavel);
+                                        foreach (Area area in ordemServico.listaAreas)
+                                        {
+                                            Console.WriteLine("\tCodigo area {0}: {1}", x, area.codigo);
+                                            Console.WriteLine("\tTamanho: {0}", area.area);
+                                            soma_areas = soma_areas + area.area;
+                                            x++;
+                                        }
+                                        Console.WriteLine("Soma todas areas: " + soma_areas);
+                                    }
+                                }
+                                else
+                                {
+                                    mostra_erro("Opcao Invalida!");
+                                }
+                            }
+                            catch (FormatException ex)
+                            {
+                                mostra_erro(ex.Message);
+                            }
+                            catch (OverflowException ex)
+                            {
+                                mostra_erro(ex.Message);
+                            }
+                            catch (Exception ex)
+                            {
+                                mostra_erro(ex.Message);
+                            }
+                            break;
+                        }
+                    case "3":
                         {
 
                             break;
                         }
-                    case 3:
-                        {
-
-                            break;
-                        }
-                    case 4:
+                    case "4":
                         {
 
                             break;
@@ -99,6 +197,15 @@ namespace OrdemServico
             Console.WriteLine("\t\tORDEM DE SERVICO");
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("\n\tErro!\n\n\tMotivo: " + msg_erro);
+            Console.ResetColor();
+        }
+
+        public static void mostra_sucesso(string msg_sucesso)
+        {
+            Console.Clear();
+            Console.WriteLine("\t\tORDEM DE SERVICO");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("\n\tPronto!\n\n\t" + msg_sucesso);
             Console.ResetColor();
         }
     }

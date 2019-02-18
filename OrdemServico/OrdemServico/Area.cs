@@ -31,11 +31,12 @@ namespace OrdemServico
             int qtde_areas = Convert.ToInt32(Console.ReadLine());
             for (int i = 0; i < qtde_areas; i++)
             {
+                Area a1 = new Area();
                 Console.Write("\nDigite o codigo da {0}º area: ", i+1);
-                a.codigo = Convert.ToInt32(Console.ReadLine());
+                a1.codigo = Convert.ToInt32(Console.ReadLine());
                 Console.Write("\nDigite a area da {0}º area: ", i+1);
-                a.area = Convert.ToDouble(Console.ReadLine());
-                a.listaAreas.Add(a);
+                a1.area = Convert.ToDouble(Console.ReadLine());
+                a.listaAreas.Add(a1);
             }
             return a.listaAreas;
         }
