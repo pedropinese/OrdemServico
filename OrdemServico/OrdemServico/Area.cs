@@ -34,7 +34,7 @@ namespace OrdemServico
                 Area a1 = new Area();
                 Console.Write("\nDigite o codigo da {0}º area: ", i+1);
                 a1.codigo = Convert.ToInt32(Console.ReadLine());
-                Console.Write("\nDigite a area da {0}º area: ", i+1);
+                Console.Write("\nDigite o tamanho da {0}º area: ", i+1);
                 a1.area = Convert.ToDouble(Console.ReadLine());
                 a.listaAreas.Add(a1);
             }
