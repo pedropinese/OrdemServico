@@ -90,7 +90,7 @@ namespace OrdemServico
                                         Console.WriteLine("Nº OS: {0}\nData Abertura: {1}\nResponsavel: {2}", ordemServico.numero, ordemServico.data_abertura.ToString("dd/MM/yyy"), ordemServico.responsavel);
                                         foreach (Area area in ordemServico.listaAreas)
                                         {
-                                            Console.WriteLine("\tCodigo area {0}: {1}", x, area.codigo);
+                                            Console.WriteLine("\n\tCodigo area {0}: {1}", x, area.codigo);
                                             Console.WriteLine("\tTamanho: {0}", area.area);
                                             soma_areas = soma_areas + area.area;
                                             x++;
@@ -108,7 +108,7 @@ namespace OrdemServico
                                         Console.WriteLine("Nº OS: {0}\nData Abertura: {1}\nData Encerramento: {2}\nResponsavel: {3}", ordemServico.numero, ordemServico.data_abertura.ToString("dd/MM/yyy"), ordemServico.data_encerramento, ordemServico.responsavel);
                                         foreach (Area area in ordemServico.listaAreas)
                                         {
-                                            Console.WriteLine("\tCodigo area {0}: {1}", x, area.codigo);
+                                            Console.WriteLine("\n\tCodigo area {0}: {1}", x, area.codigo);
                                             Console.WriteLine("\tTamanho: {0}", area.area);
                                             soma_areas = soma_areas + area.area;
                                             x++;
@@ -127,7 +127,7 @@ namespace OrdemServico
                                         Console.WriteLine("Nº OS: {0}\nData Abertura: {1}\nResponsavel: {2}", ordemServico.numero, ordemServico.data_abertura.ToString("dd/MM/yyy"), ordemServico.responsavel);
                                         foreach (Area area in ordemServico.listaAreas)
                                         {
-                                            Console.WriteLine("\tCodigo area {0}: {1}", x, area.codigo);
+                                            Console.WriteLine("\n\tCodigo area {0}: {1}", x, area.codigo);
                                             Console.WriteLine("\tTamanho: {0}", area.area);
                                             soma_areas = soma_areas + area.area;
                                             x++;
@@ -143,7 +143,7 @@ namespace OrdemServico
                                         Console.WriteLine("Nº OS: {0}\nData Abertura: {1}\nData Encerramento: {2}\nResponsavel: {3}", ordemServico.numero, ordemServico.data_abertura, ordemServico.data_encerramento, ordemServico.responsavel);
                                         foreach (Area area in ordemServico.listaAreas)
                                         {
-                                            Console.WriteLine("\tCodigo area {0}: {1}", x, area.codigo);
+                                            Console.WriteLine("\n\tCodigo area {0}: {1}", x, area.codigo);
                                             Console.WriteLine("\tTamanho: {0}", area.area);
                                             soma_areas = soma_areas + area.area;
                                             x++;
@@ -181,37 +181,29 @@ namespace OrdemServico
                                 }
                                 titulo("Digite o numero da OS que deseja encerrar: ");
                                 int num_digitado = Convert.ToInt32(Console.ReadLine());
-                                int x = 0;
-                                foreach (Os ordemServico in os.listaOsAbertas)
+
+                                var os_existente = os.listaOsAbertas.Where(p => p.numero == num_digitado).First();
+                                if (os_existente.numero == num_digitado)
                                 {
-                                    if (num_digitado == ordemServico.numero)
+                                    do
                                     {
-                                        do
+                                        titulo("Digite a data de encerramento: ");
+                                        os_existente.data_encerramento = Convert.ToDateTime(Console.ReadLine());
+                                        if (os_existente.data_encerramento < os_existente.data_abertura)
                                         {
-                                            titulo("Digite a data de encerramento: ");
-                                            ordemServico.data_encerramento = Convert.ToDateTime(Console.ReadLine());
-                                            if (ordemServico.data_encerramento < ordemServico.data_abertura)
-                                            {
-                                                mostra_erro("Data de encerramento deve ser posterior a de abertura");
-                                                Console.ReadKey();
-                                            }
-                                        } while (ordemServico.data_encerramento < ordemServico.data_abertura);
-
-                                        os.listaOsFechadas.Add(ordemServico);
-                                        os.listaOsAbertas.Remove(ordemServico);
-                                        mostra_sucesso("Data inserida com sucesso");
-                                        break;
-
-                                    }
-                                    else
-                                    {
-                                        x++;
-                                        if (x == os.listaOsAbertas.Count)
-                                        {
-                                            mostra_erro("Numero invalido!");
+                                            mostra_erro("Data de encerramento deve ser posterior a de abertura");
+                                            Console.ReadKey();
                                         }
+                                    } while (os_existente.data_encerramento < os_existente.data_abertura);
 
-                                    }
+                                    os.listaOsFechadas.Add(os_existente);
+                                    os.listaOsAbertas.Remove(os_existente);
+                                    mostra_sucesso("Data inserida com sucesso");
+                                    break;
+                                }
+                                else
+                                {
+                                    mostra_erro("Numero invalido!");
                                 }
                             }
                             catch (FormatException ex)
@@ -239,29 +231,21 @@ namespace OrdemServico
                                 }
                                 titulo("Digite o numero da OS que deseja adicionar: ");
                                 int num_digitado = Convert.ToInt32(Console.ReadLine());
-                                int x = 0;
-                                foreach (Os ordemServico in os.listaOsAbertas)
+                                var os_existente = os.listaOsAbertas.Where(p => p.numero == num_digitado).First();
+                                if (os_existente.numero == num_digitado)
                                 {
-                                    if (num_digitado == ordemServico.numero)
-                                    {
-                                        Area a1 = new Area();
-                                        Console.Write("\nDigite o codigo da area: ");
-                                        a1.codigo = Convert.ToInt32(Console.ReadLine());
-                                        Console.Write("\nDigite o tamanho da area: ");
-                                        a1.area = Convert.ToDouble(Console.ReadLine());
-                                        ordemServico.listaAreas.Add(a1);
-                                        mostra_sucesso("Area inserida com sucesso");
-                                        break;
-                                    }
-                                    else
-                                    {
-                                        x++;
-                                        if (x == os.listaOsAbertas.Count)
-                                        {
-                                            mostra_erro("Numero invalido!\n\t\t(Verifique se essa OS continua aberta)");
-                                        }
-
-                                    }
+                                    Area a1 = new Area();
+                                    Console.Write("\nDigite o codigo da area: ");
+                                    a1.codigo = Convert.ToInt32(Console.ReadLine());
+                                    Console.Write("\nDigite o tamanho da area: ");
+                                    a1.area = Convert.ToDouble(Console.ReadLine());
+                                    os_existente.listaAreas.Add(a1);
+                                    mostra_sucesso("Area inserida com sucesso");
+                                    break;
+                                }
+                                else
+                                {
+                                    mostra_erro("Numero invalido!\n\t\t(Verifique se essa OS continua aberta)");
                                 }
                             }
                             catch (FormatException ex)
@@ -307,7 +291,7 @@ namespace OrdemServico
             Console.ResetColor();
         }
 
-        public static Os criar_os()
+        protected static Os criar_os()
         {
             Os os = new Os();
             titulo("");
@@ -350,7 +334,7 @@ namespace OrdemServico
             return os;
         }
 
-        public static List<Area> inserir_areas()
+        protected static List<Area> inserir_areas()
         {
             Area a = new Area();
             a.listaAreas = new List<Area>();
