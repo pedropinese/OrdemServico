@@ -71,6 +71,11 @@ namespace OrdemServico
                             {
                                 double soma_areas;
                                 int x;
+                                if (os.listaOsAbertas.Count() == 0 && os.listaOsFechadas.Count() == 0)
+                                {
+                                    mostra_erro("Nenhuma OS cadastrada!");
+                                    break;
+                                }
                                 Console.Clear();
                                 Console.WriteLine("\t\tORDEM DE SERVICO");
                                 Console.WriteLine("\n\t1 - OS Abertas\n\t2 - OS Fechadas\n\t3 - Todas as OS");
@@ -174,6 +179,11 @@ namespace OrdemServico
                         {
                             try
                             {
+                                if (os.listaOsAbertas.Count() == 0)
+                                {
+                                    mostra_erro("Nenhuma OS aberta!");
+                                    break;
+                                }
                                 Console.Clear();
                                 Console.WriteLine("\t\tORDEM DE SERVICO");
                                 Console.Write("\nDigite o numero da OS que deseja encerrar: ");
@@ -219,6 +229,11 @@ namespace OrdemServico
                         {
                             try
                             {
+                                if (os.listaOsAbertas.Count() == 0)
+                                {
+                                    mostra_erro("Nenhuma OS aberta!");
+                                    break;
+                                }
                                 Console.Clear();
                                 Console.WriteLine("\t\tORDEM DE SERVICO");
                                 Console.Write("\nDigite o numero da OS que deseja adicionar: ");
@@ -242,7 +257,7 @@ namespace OrdemServico
                                         x++;
                                         if (x == os.listaOsAbertas.Count)
                                         {
-                                            mostra_erro("Numero invalido!\n(Verifique se essa OS continua aberta)");
+                                            mostra_erro("Numero invalido!\n\t\t(Verifique se essa OS continua aberta)");
                                         }
 
                                     }
