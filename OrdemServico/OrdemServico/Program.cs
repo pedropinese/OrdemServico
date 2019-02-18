@@ -10,7 +10,11 @@ namespace OrdemServico
     {
         static void Main(string[] args)
         {
-            int operacao = 99;
+            int operacao = 99, numero_os = 1;
+            Area a = new Area();
+            Os os = new Os();
+            os.listaOsAbertas = new List<Os>();
+            os.listaOsFechadas = new List<Os>();
             while (operacao != 0)
             {
                 Console.Clear();
@@ -29,7 +33,38 @@ namespace OrdemServico
                         }
                     case 1:
                         {
-
+                            try
+                            {
+                                Os nova_os = new Os();
+                                nova_os = os.criar_os();
+                                nova_os.numero = numero_os;
+                                if (nova_os.data_encerramento.Equals(null)) //verifica se a os tem encerramento ou nao
+                                {
+                                    os.listaOsAbertas.Add(nova_os);
+                                }
+                                else
+                                {
+                                    os.listaOsFechadas.Add(nova_os);
+                                }
+                                Console.Clear();
+                                Console.WriteLine("\t\tORDEM DE SERVICO");
+                                Console.ForegroundColor = ConsoleColor.Green;
+                                Console.WriteLine("\n\tOS cadastrada com sucesso!");
+                                Console.ResetColor();
+                                numero_os++;
+                            }
+                            catch (FormatException ex)
+                            {
+                                mostra_erro(ex.Message);
+                            }
+                            catch (OverflowException ex)
+                            {
+                                mostra_erro(ex.Message);
+                            }
+                            catch (Exception ex)
+                            {
+                                mostra_erro(ex.Message);
+                            }
                             break;
                         }
                     case 2:
