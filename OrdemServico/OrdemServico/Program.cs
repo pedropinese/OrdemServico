@@ -10,6 +10,7 @@ namespace OrdemServico
     class Program
     {
         public static int numero_os = 1;
+        public static List<Area> listaAreas = new List<Area>();
 
         static void Main(string[] args)
         {
@@ -336,20 +337,25 @@ namespace OrdemServico
 
         protected static List<Area> inserir_areas()
         {
-            Area a = new Area();
-            a.listaAreas = new List<Area>();
             Console.Write("\nDigite quantas areas deseja inserir: ");
             int qtde_areas = Convert.ToInt32(Console.ReadLine());
+            bool duplicidade = false;
             for (int i = 0; i < qtde_areas; i++)
             {
-                Area a1 = new Area();
-                Console.Write("\nDigite o codigo da {0}º area: ", i + 1);
-                a1.codigo = Convert.ToInt32(Console.ReadLine());
+                Area a1;
+                do
+                {
+                    a1 = new Area();
+                    Console.Write("\nDigite o codigo da {0}º area: ", i + 1);
+                    a1.codigo = Convert.ToInt32(Console.ReadLine());
+                    duplicidade = verifica_duplicidade(a1.codigo);
+                } while (duplicidade == true);
+                
                 Console.Write("\nDigite o tamanho da {0}º area: ", i + 1);
                 a1.area = Convert.ToDouble(Console.ReadLine());
-                a.listaAreas.Add(a1);
+                listaAreas.Add(a1);
             }
-            return a.listaAreas;
+            return listaAreas;
         }
 
         public static void titulo (string texto)
@@ -361,5 +367,22 @@ namespace OrdemServico
             Console.WriteLine("\n\t"+texto);            
         }
 
+        public static bool verifica_duplicidade(int codigo_area)
+        {
+            if (listaAreas.Count > 0)
+            {
+                try
+                {
+                    var consulta = listaAreas.Where(a => a.codigo == codigo_area).First();
+                    mostra_erro("Esse código de area ja existe!");
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+            return false;
+        }
     }
 }
